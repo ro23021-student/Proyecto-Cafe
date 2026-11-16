@@ -23,6 +23,14 @@ jobs:
           cp -r /tmp/lib_bak/* lib/ && cp /tmp/pubspec_bak.yaml pubspec.yaml
           sed -i 's|<application|<uses-permission android:name="android.permission.INTERNET"/>\n    <application android:allowBackup="false" android:usesCleartextTraffic="true"|' android/app/src/main/AndroidManifest.xml
           cat android/app/src/main/AndroidManifest.xml
+      - name: Personalizar nombre e icono de la app
+        working-directory: cliente/trazabilidad_app
+        env:
+          NOMBRE_APP: TrazabilidadCafe
+        run: |
+          cp -r ci/android-res/* android/app/src/main/res/
+          sed -i "s|android:label=\"[^\"]*\"|android:label=\"$NOMBRE_APP\"|" android/app/src/main/AndroidManifest.xml
+          grep -n 'android:label\|android:icon' android/app/src/main/AndroidManifest.xml
       - name: Usar la clave de firma fija (para poder actualizar la app sin desinstalarla)
         run: |
           mkdir -p ~/.android
